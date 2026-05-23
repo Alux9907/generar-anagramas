@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Anagramas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-top: 0;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        button {
+            width: 100%;
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #4338ca;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            min-height: 50px;
+            white-space: pre-wrap; /* Respeta los saltos de línea */
+            font-family: monospace;
+            font-size: 18px;
+            color: #111827;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Generador de Anagramas</h1>
+        <p>Ingresa una o varias palabras (puedes usar varias líneas):</p>
+        
+        <textarea id="inputText" placeholder="Ej: HARRY POTTER"></textarea>
+        <button onclick="procesarTexto()">Generar Anagramas</button>
+        
+        <div class="result-box" id="resultado">Aquí aparecerán los anagramas...</div>
+    </div>
+
+    <script>
+        // Función principal que se ejecuta al hacer clic en el botón
+        function procesarTexto() {
+            // REGLA 2: Convertir todo a MAYÚSCULAS desde el principio
+            const textoOriginal = document.getElementById('inputText').value.toUpperCase();
+            
+            // Separamos el texto por líneas por si el usuario escribe varias frases hacia abajo
+            const lineas = textoOriginal.split('\n');
+            
+            const lineasProcesadas = lineas.map(linea => {
+                // REGLAS 1 y 3: Separamos la línea por espacios para aislar cada palabra.
+                // Así no mezclamos letras de una palabra con otra.
+                const palabras = linea.split(' ');
+                
+                // Mezclamos las letras de cada palabra de forma individual
+                const palabrasMezcladas = palabras.map(palabra => mezclarPalabra(palabra));
+                
+                // Volvemos a unir las palabras con un espacio
+                return palabrasMezcladas.join(' ');
+            });
+
+            // Mostramos el resultado uniendo las líneas de nuevo
+            document.getElementById('resultado').textContent = lineasProcesadas.join('\n');
+        }
+
+        // Función auxiliar: Algoritmo para desordenar (mezclar) las letras de un solo texto
+        function mezclarPalabra(palabra) {
+            // Si no hay palabra (ej: doble espacio), la devolvemos tal cual
+            if (!palabra) return '';
+            
+            // Convertimos la palabra en un array de letras ('H','A','R','R','Y')
+            let letras = palabra.split('');
+            
+            // Algoritmo de Fisher-Yates para mezclar arrays aleatoriamente
+            for (let i = letras.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                // Intercambiamos la letra en la posición i con la posición j
+                [letras[i], letras[j]] = [letras[j], letras[i]];
+            }
+            
+            // Volvemos a unir las letras en un texto
+            return letras.join('');
+        }
+    </script>
+
+</body>
+                                    </html>
+                                    
